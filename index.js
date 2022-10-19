@@ -5,6 +5,7 @@ const env = require('dotenv')
 const cors = require('cors')
 
 const MentorRoutes = require('./routes/mentor.routes')
+const StudentRoutes = require('./routes/student.routes')
 
 env.config()
 const app = express()
@@ -17,6 +18,7 @@ app.use(cors())
 mongoose.set('debug', true)
 
 MentorRoutes(app)
+StudentRoutes(app)
 
 // Get
 app.get('/', (req, res) => {

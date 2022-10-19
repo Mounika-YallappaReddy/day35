@@ -1,10 +1,10 @@
 const mentorController = require('../controllers/mentor.controller')
-const menotrMiddleware = require('../middlewares/mentor.middleware')
+const mentorMiddleware = require('../middlewares/mentor.middleware')
 
 const routes = (app) => {
   app.post(
     '/api/v1/mentor',
-    menotrMiddleware.validateMentorCreateRequest,
+    mentorMiddleware.validateMentorCreateRequest,
     mentorController.createMentor
   )
 
