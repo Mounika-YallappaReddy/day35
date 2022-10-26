@@ -53,9 +53,23 @@ const getStudents = async (req, res) => {
   }
 }
 
+const assignedMentor = async (req, res) => {
+  try {
+    const response = await studentService.assignMentor(req.body)
+    successResponseBody.data = response
+    successResponseBody.message = "Success, Student found"
+
+    return res.status(200).json(successResponseBody)
+  } catch (error) {
+    errorResponseBody.err = error
+    return res.status(500).json(errorResponseBody)
+  }
+}
+
 module.exports = {
   createStudent,
   deleteStudent,
   getStudent,
-  getStudents
+  getStudents,
+  assignedMentor
 }

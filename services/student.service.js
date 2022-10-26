@@ -1,4 +1,5 @@
 const Student = require('../models/student.model')
+const Mentor = require('../models/mentor.model')
 
 const createStudent = async (data) => {
   try {
@@ -47,9 +48,42 @@ const fetchStudents = async (filter) => {
   return students
 }
 
+const assignMentor = async (req, res) => {
+	const { _id } = req.params
+	const { selectedMentor } = req.body
+	try {
+		const mentorTobeAssigned = await Mentor.findById(selectedMentor)
+		const student = await Student.findById(_id)
+		if (student.isMentorAssigned)
+			return res.status(400).send('Already assigned')
+
+		//update student
+		await Student.updateOne(
+			{ _id },
+			{
+				assignedMentor: mongoose.Types.ObjectId(selectedMentor),
+				isMentorAssigned: true,
+			}
+		)
+		//Update mentor
+		const updatedStudents = [
+			...mentorTobeAssigned.assignedStudents,
+			mongoose.Types.ObjectId(_id),
+		]
+		await Mentor.updateOne(
+			{ _id: selectedMentor },
+			{ assignedStudents: updatedStudents }
+		)
+		res.status(200).send('Assigned successfully')
+	} catch (error) {
+		res.status(500).json({ error: 'Error assigning Mentor: ' + error })
+	}
+}
+
 module.exports = {
   createStudent,
   deleteStudent,
   getStudentById,
-  fetchStudents
+  fetchStudents,
+  assignMentor
 }

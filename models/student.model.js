@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const { Schema } = mongoose
 
 const studentSchema = new mongoose.Schema({
   name: {
@@ -18,10 +19,14 @@ const studentSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  mentor: {
-    type: String,
-    required: false
-  }
+  isMentorAssigned: {
+    type: Boolean,
+    default: false,
+  },
+  assignedMentor: {
+    type: Schema.Types.ObjectId,
+    ref: 'Mentor',
+  },
 })
 
 const Student = mongoose.model('Student', studentSchema)

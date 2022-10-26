@@ -1,4 +1,5 @@
 const Mentor = require('../models/mentor.model')
+const Student = require('../models/student.model')
 
 const createMentor = async (data) => {
   try {
@@ -47,9 +48,31 @@ const fetchMentors = async (filter) => {
   return mentors
 }
 
+const assignStudents = async (req, res) => {
+	const { _id } = req.params
+	const studentsToBeAssigned = req.body
+	try {
+		// const mentor = await Mentor.findById(_id)
+
+		//Update students with the mentor
+		await Student.updateMany(
+			{ _id: { $in: studentsToBeAssigned } },
+			{ $set: { isMentorAssigned: true, assignedMentor: _id } },
+			{ multi: true }
+		)
+    
+		//Update mentor
+		await Mentor.updateOne({ _id }, { assignedStudents: studentsToBeAssigned })
+		res.status(200).send('Updated students successfully')
+	} catch (error) {
+		res.status(500).send('error assigning students: ' + error)
+	}
+}
+
 module.exports = {
   createMentor,
   deleteMentor,
   getMentorById,
-  fetchMentors
+  fetchMentors,
+  assignStudents
 }

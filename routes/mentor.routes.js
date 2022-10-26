@@ -8,6 +8,12 @@ const routes = (app) => {
     mentorController.createMentor
   )
 
+  app.post(
+    '/api/v1/assignstudent',
+    mentorMiddleware.validateMentorCreateRequest,
+    mentorController.createMentor
+  )
+
   app.get(
     '/api/v1/mentors',
     mentorController.getMentors
