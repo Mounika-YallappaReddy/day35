@@ -32,6 +32,6 @@ app.listen(process.env.PORT, async () => {
     await mongoose.connect(process.env.PROD_DB_URL)
     console.log("Successfully connected to mongo");
   } catch (error) {
-    console.log("Not able to connect mongo", err);
+    console.log("Not able to connect mongo", error);
   }
 })
